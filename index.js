@@ -2,11 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const monk = require('monk');
 // const scrapes = require('./scrapes');
+if (process.env.NODE_ENV !== 'production')
+  require('dotenv').config()
 
 const app = express();
-if (app.get('env') == 'development') {
-  require('dotenv').config();
-}
 const port = process.env.PORT || 3000;
 const uri = process.env.MONGOURI;
 const db = monk(uri);
