@@ -4,8 +4,11 @@ const monk = require('monk');
 // const scrapes = require('./scrapes');
 
 const app = express();
+if (app.get('env') == 'development') {
+  require('dotenv').config();
+}
 const port = process.env.PORT || 3000;
-const uri = 'mongodb+srv://admin:sv15853456@urldata.sukig.mongodb.net/URLData?retryWrites=true&w=majority';
+const uri = process.env.MONGOURI;
 const db = monk(uri);
 const data = db.get('creators');
 data.options.castIds = false;

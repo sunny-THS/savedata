@@ -1,7 +1,6 @@
 function SendData() {
   const file = document.querySelector('#f');
   const Files = file.files;
-  console.log(Files);
   var r = new FileReader();
   r.onload = function () {
     const setupFile = {
@@ -9,7 +8,6 @@ function SendData() {
       type: Files[0].type,
       url_data: r.result
     }
-    console.log(setupFile);
     fetch('../upload', {
       method: 'POST',
       headers: {
