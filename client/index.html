@@ -6,11 +6,13 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <input id="f" type="file" id="files" />
+    <input id="f" type="file" id="files" multiple/>
     <input type="submit" onclick="SendData()" value="Submit">
+    <input type="submit" onclick="RemoveDataAll()" value="RemoveALL">
 
     <div class="container"></div>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="index.js"></script>
   </body>
 </html>

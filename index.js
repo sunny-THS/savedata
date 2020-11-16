@@ -1,17 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const monk = require('monk');
+var http = require('http');
 // const scrapes = require('./scrapes');
 if (process.env.NODE_ENV !== 'production')
   require('dotenv').config()
 
 const app = express();
+const server = http.createServer(app)
+const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 const uri = process.env.MONGOURI;
 const db = monk(uri);
 const data = db.get('creators');
 data.options.castIds = false;
-// data.remove();
+
+server.listen(port, () => console.log(`Example app listening on port ${port}`));
 
 app.use(express.static('client'));
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -28,11 +32,21 @@ app.get('/data', (req, res) => {
       res.send(creator); // get from db
     })
 })
-app.post('/upload', (req, res) => {
-  console.log(req.body);
-  data.insert(req.body);
-  res.send(req.body);
+
+io.on('connection', (socket) => {
+  socket.on('ClientSendData', (data_) => {
+    console.log(data_);
+    data.insert(JSON.parse(data_));
+    io.sockets.emit('ServerSendData', data_);
+  });
+  socket.on('ClientRemoveData', (data_) => {
+    data.remove();
+    io.sockets.emit('ServerRemoveData', data_);
+  });
+
+  data
+  .find()
+  .then(creator => {
+    socket.emit('data', creator);
+  });
 });
-
-
-app.listen(port, () => console.log(`Example app listening on port ${port}`));

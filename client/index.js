@@ -1,28 +1,35 @@
+// with ES6 import
+const socket = io();
+socket.on('data', (res) => {
+  console.log(res);
+  res.forEach(data => {
+    ShowData(data);
+  });
+});
+socket.on('ServerSendData', (res) => {
+  ShowData(JSON.parse(res));
+});
+socket.on('ServerRemoveData', (res) => {
+  var ctr = document.querySelector('.container');
+  while (ctr.hasChildNodes()) {
+      ctr.removeChild(ctr.firstChild);
+  }
+});
 function SendData() {
   const file = document.querySelector('#f');
   const Files = file.files;
-  var r = new FileReader();
-  r.onload = function () {
+  for (var i = 0; i < Files.length; i++) {
+    const url = URL.createObjectURL(Files[i])
     const setupFile = {
-      name: Files[0].name,
-      type: Files[0].type,
-      url_data: r.result
+      name: Files[i].name,
+      type: Files[i].type,
+      url_data: url
     }
-    fetch('../upload', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(setupFile)
-    }).then(res => res.json())
-      .then(data =>
-        {
-          ShowData(data);
-          const ctr = document.querySelector('.container');
-          ctr.scrollTop = ctr.scrollHeight;
-        });
+    socket.emit('ClientSendData', JSON.stringify(setupFile));
   }
-  r.readAsDataURL(Files[0]); // set url data
+}
+function RemoveDataAll() {
+  socket.emit('ClientRemoveData', '');
 }
 function newEl(type, attrs={}) {
   const el = document.createElement(type);
@@ -37,7 +44,6 @@ function ShowData(val) {
   const ctr = document.querySelector('.container');
   const card = newEl('div', {class: 'card'});
   var url;
-  console.log(val.type);
   if (val.type == "image/png" || val.type == "image/jpeg") {
     url = newEl('img', {
       src: val.url_data,
@@ -52,15 +58,5 @@ function ShowData(val) {
   }
   card.appendChild(url);
   ctr.appendChild(card);
+  ctr.scrollTop = ctr.scrollHeight;
 }
-async function loadData() {
-  const res = await fetch('../data');
-  const data = await res.json();
-  console.log(data);
-
-  data.forEach(data_ => {
-    ShowData(data_);
-  });
-  return data;
-}
-loadData();
