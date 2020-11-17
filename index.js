@@ -14,7 +14,7 @@ const uri = process.env.MONGOURI;
 const db = monk(uri);
 const data = db.get('creators');
 data.options.castIds = false;
-
+// data.remove();
 server.listen(port, () => console.log(`Example app listening on port ${port}`));
 
 app.use(express.static('client'));

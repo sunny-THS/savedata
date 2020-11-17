@@ -9,12 +9,7 @@ socket.on('data', (res) => {
 socket.on('ServerSendData', (res) => {
   ShowData(JSON.parse(res));
 });
-socket.on('ServerRemoveData', (res) => {
-  var ctr = document.querySelector('.container');
-  while (ctr.hasChildNodes()) {
-      ctr.removeChild(ctr.firstChild);
-  }
-});
+
 function SendData() {
   const file = document.querySelector('#f');
   const Files = file.files;
@@ -28,9 +23,7 @@ function SendData() {
     socket.emit('ClientSendData', JSON.stringify(setupFile));
   }
 }
-function RemoveDataAll() {
-  socket.emit('ClientRemoveData', '');
-}
+
 function newEl(type, attrs={}) {
   const el = document.createElement(type);
   for (let attr in attrs) {
@@ -60,3 +53,35 @@ function ShowData(val) {
   ctr.appendChild(card);
   ctr.scrollTop = ctr.scrollHeight;
 }
+
+
+var inputs = document.querySelectorAll( '.inputfile' );
+Array.prototype.forEach.call( inputs, function( input )
+{
+	var label	 = input.nextElementSibling,
+		labelVal = label.innerHTML;
+
+	input.addEventListener( 'change', function( e )
+	{
+    const bol = confirm("Do you save your files?");
+    if (bol) {
+      console.log('success');
+      SendData();
+      e.target.value = 'OK';
+    }else {
+      e.target.value = '';
+      console.log('exit');
+    }
+
+		var fileName = '';
+		if( this.files && this.files.length > 1 )
+			fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+		else
+			fileName = e.target.value.split( '\\' ).pop();
+
+    if( fileName )
+      label.querySelector( 'span' ).innerHTML = fileName;
+    else
+      label.innerHTML = labelVal;
+	});
+});
