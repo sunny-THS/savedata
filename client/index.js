@@ -46,7 +46,8 @@ function ShowData(val) {
     url = newEl('a', {
       href: val.url_data,
       innerText: val.name,
-      target: '_blank'
+      target: '_blank',
+      download: val.name,
     });
   }
   card.appendChild(url);
@@ -67,11 +68,10 @@ Array.prototype.forEach.call( inputs, function( input )
     if (bol) {
       console.log('success');
       SendData();
-      e.target.value = 'OK';
     }else {
-      e.target.value = '';
       console.log('exit');
     }
+    e.target.value = '';
 
 		var fileName = '';
 		if( this.files && this.files.length > 1 )
