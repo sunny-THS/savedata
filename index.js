@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const monk = require('monk');
 var http = require('http');
-// const scrapes = require('./scrapes');
 if (process.env.NODE_ENV !== 'production')
   require('dotenv').config()
 
@@ -35,7 +34,6 @@ app.get('/data', (req, res) => {
 
 io.on('connection', (socket) => {
   socket.on('ClientSendData', (data_) => {
-    console.log(data_);
     data.insert(data_);
     io.sockets.emit('ServerSendData', data_);
   });
