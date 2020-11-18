@@ -10,21 +10,25 @@ socket.on('ServerSendData', (res) => {
   ShowData(JSON.parse(res));
 });
 
-function SendData() {
-  const file = document.querySelector('#f');
-  const Files = file.files;
-  for (var i = 0; i < Files.length; i++) {
-    const url = URL.createObjectURL(Files[i])
-    const setupFile = {
-      name: Files[i].name,
-      type: Files[i].type,
-      url_data: url
-    }
+function SendData(files) {
+  var counter = -1, file;
+  while (file = files[++counter]) {
+    var reader = new FileReader();
+    reader.onloadend = (function(file) {
+      return function() {
+        const setupFile = {
+          name: file.name,
+          type: file.type,
+          url_data: this.result
+        }
+      }
+    })(file);
+    reader.readAsDataURL(file);
     socket.emit('ClientSendData', JSON.stringify(setupFile));
   }
 }
 
-function newEl(type, attrs={}) {
+function newEl(type, attrs = {}) {
   const el = document.createElement(type);
   for (let attr in attrs) {
     const val = attrs[attr];
@@ -33,16 +37,19 @@ function newEl(type, attrs={}) {
   }
   return el;
 }
+
 function ShowData(val) {
   const ctr = document.querySelector('.container');
-  const card = newEl('div', {class: 'card'});
+  const card = newEl('div', {
+    class: 'card'
+  });
   var url;
   if (val.type == "image/png" || val.type == "image/jpeg") {
     url = newEl('img', {
       src: val.url_data,
       width: '300px'
     });
-  }else {
+  } else {
     url = newEl('a', {
       href: val.url_data,
       innerText: val.name,
@@ -56,32 +63,30 @@ function ShowData(val) {
 }
 
 
-var inputs = document.querySelectorAll( '.inputfile' );
-Array.prototype.forEach.call( inputs, function( input )
-{
-	var label	 = input.nextElementSibling,
-		labelVal = label.innerHTML;
+var inputs = document.querySelectorAll('.inputfile');
+Array.prototype.forEach.call(inputs, function(input) {
+  var label = input.nextElementSibling,
+    labelVal = label.innerHTML;
 
-	input.addEventListener( 'change', function( e )
-	{
+  input.addEventListener('change', function(e) {
     const bol = confirm("Do you save your files?");
     if (bol) {
       console.log('success');
-      SendData();
-    }else {
+      SendData(this.files);
+    } else {
       console.log('exit');
     }
     e.target.value = '';
 
-		var fileName = '';
-		if( this.files && this.files.length > 1 )
-			fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-		else
-			fileName = e.target.value.split( '\\' ).pop();
+    var fileName = '';
+    if (this.files && this.files.length > 1)
+      fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+    else
+      fileName = e.target.value.split('\\').pop();
 
-    if( fileName )
-      label.querySelector( 'span' ).innerHTML = fileName;
+    if (fileName)
+      label.querySelector('span').innerHTML = fileName;
     else
       label.innerHTML = labelVal;
-	});
+  });
 });
