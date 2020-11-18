@@ -21,10 +21,10 @@ function SendData(files) {
           type: file.type,
           url_data: this.result
         }
+        socket.emit('ClientSendData', JSON.stringify(setupFile));
       }
     })(file);
     reader.readAsDataURL(file);
-    socket.emit('ClientSendData', JSON.stringify(setupFile));
   }
 }
 
