@@ -18,7 +18,7 @@ data.options.castIds = false;
 server.listen(port, () => console.log(`Example app listening on port ${port}`));
 
 app.use(express.static('client'));
-app.use(bodyParser.json({ limit: "1gb" }));
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", '*'); // disabled for security local
   res.header("Access-Control-Allow-Headers", 'Content-Type');
