@@ -25,7 +25,6 @@ function SendData(files) {
           lastModifiedDate: lastModifiedDate_.toLocaleString('en-GB'),
           url_data: this.result
         }
-        console.log(setupFile);
         socket.emit('ClientSendData', JSON.stringify(setupFile));
       }
     })(file);
