@@ -1,6 +1,9 @@
 // with ES6 import
 const socket = io();
 socket.on('data', (res) => {
+  var ctr = document.querySelector('.container');
+  while (ctr.hasChildNodes()) {
+      ctr.removeChild(ctr.firstChild);
   console.log(res);
   res.forEach(data => {
     ShowData(data);
