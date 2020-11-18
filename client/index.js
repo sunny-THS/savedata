@@ -12,15 +12,20 @@ socket.on('ServerSendData', (res) => {
 
 function SendData(files) {
   var counter = -1, file;
+  const date = new Date(Date.now());
   while (file = files[++counter]) {
+    const lastModifiedDate_ = new Date(file.lastModified);
     var reader = new FileReader();
     reader.onloadend = (function(file) {
       return function() {
         const setupFile = {
           name: file.name,
           type: file.type,
+          date: date.toLocaleString('en-GB'),
+          lastModifiedDate: lastModifiedDate_.toLocaleString('en-GB'),
           url_data: this.result
         }
+        console.log(setupFile);
         socket.emit('ClientSendData', JSON.stringify(setupFile));
       }
     })(file);
