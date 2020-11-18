@@ -1,18 +1,18 @@
-// with ES6 import
-const socket = io();
-socket.on('data', (res) => {
-  var ctr = document.querySelector('.container');
-  while (ctr.hasChildNodes()) {
-      ctr.removeChild(ctr.firstChild);
-  }
-  console.log(res);
-  res.forEach(data => {
-    ShowData(data);
-  });
-});
-socket.on('ServerSendData', (res) => {
-  ShowData(JSON.parse(res));
-});
+// // with ES6 import
+// const socket = io();
+// socket.on('data', (res) => {
+//   var ctr = document.querySelector('.container');
+//   while (ctr.hasChildNodes()) {
+//       ctr.removeChild(ctr.firstChild);
+//   }
+//   console.log(res);
+//   res.forEach(data => {
+//     ShowData(data);
+//   });
+// });
+// socket.on('ServerSendData', (res) => {
+//   ShowData(res);
+// });
 
 function SendData(files) {
   var counter = -1, file;
@@ -22,6 +22,9 @@ function SendData(files) {
     var reader = new FileReader();
     reader.onloadend = (function(file) {
       return function() {
+        // this.reader is uri base64
+        // convert base64 to binary
+        // const binary =
         const setupFile = {
           name: file.name,
           type: file.type,
@@ -29,8 +32,8 @@ function SendData(files) {
           lastModifiedDate: lastModifiedDate_.toLocaleString('en-GB'),
           url_data: this.result
         }
-        console.log(setupFile.url_data);
-        socket.emit('ClientSendData', JSON.stringify(setupFile));
+        console.log(setupFile);
+        // socket.emit('ClientSendData', setupFile);
       }
     })(file);
     reader.readAsDataURL(file);

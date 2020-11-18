@@ -36,7 +36,7 @@ app.get('/data', (req, res) => {
 io.on('connection', (socket) => {
   socket.on('ClientSendData', (data_) => {
     console.log(data_);
-    data.insert(JSON.parse(data_));
+    data.insert(data_);
     io.sockets.emit('ServerSendData', data_);
   });
   socket.on('ClientRemoveData', (data_) => {
