@@ -1,6 +1,7 @@
 // with ES6 import
 const socket = io();
 socket.on('data', (res) => {
+  console.log(res);
   var ctr = document.querySelector('.container');
   while (ctr.hasChildNodes()) {
       ctr.removeChild(ctr.firstChild);

@@ -13,6 +13,10 @@ body {
   margin-right: 0.25em;
   cursor: pointer;
 }
+.submit_:active {
+  background: #000;
+  color: #fff;
+}
 .inputfile {
   width: 0.1px;
 	height: 0.1px;
