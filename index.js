@@ -69,8 +69,11 @@ io.on('connection', (socket) => {
       });
     }
     uploadFile.insert(data)
-      .then(res => io.sockets.emit('ServerSendData', res))
+      .then(res => {
+        io.sockets.emit('ServerSendData', res);
+      })
       .catch(err => console.log(err));
+    socket.broadcast.emit('alert', 'success');
     res.redirect('/');
   });
 });
