@@ -12,6 +12,7 @@ socket.on('data', (res) => {
 });
 socket.on('ServerSendData', (res) => {
   ShowData(res);
+  document.querySelector('.submit_').disabled = true;
   document.querySelector('form').reset();
   document.querySelector('span').textContent = 'Choose a file...'
 });
