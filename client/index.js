@@ -11,7 +11,6 @@ socket.on('data', (res) => {
 });
 socket.on('ServerSendData', (res) => {
   ShowData(res);
-  console.log(res);
   document.querySelector('form').reset();
   document.querySelector('span').textContent = 'Choose a file...'
 });
