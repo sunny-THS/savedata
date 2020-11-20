@@ -16,10 +16,6 @@ socket.on('ServerSendData', (res) => {
   document.querySelector('form').reset();
   document.querySelector('span').textContent = 'Choose a file...'
 });
-socket.on('alert', (res) => {
-  console.log(res);
-  alert(res);
-});
 
 function newEl(type, attrs = {}) {
   const el = document.createElement(type);

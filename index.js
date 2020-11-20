@@ -73,7 +73,6 @@ io.on('connection', (socket) => {
         io.sockets.emit('ServerSendData', res);
       })
       .catch(err => console.log(err));
-    socket.broadcast.emit('alert', 'success');
     res.redirect('/');
   });
 });
