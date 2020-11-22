@@ -26,53 +26,60 @@ app.use(function (req, res, next) {
 });
 
 app.get('/data', (req, res) => {
-  data
-    .find()
-    .then(creator => {
-      res.send(creator); // get from db
-    })
+  uploadFile
+  .find()
+  .then(data => {
+    res.send(data);
+  });
 })
 
-
+app.post('/upload', (req, res) => {
+  res.redirect('/');
+});
 
 io.on('connection', (socket) => {
   socket.on('ClientRemoveData', (data_) => {
-    data.remove();
     io.sockets.emit('ServerRemoveData', data_);
+  });
+
+  socket.on('ClientSendData', (data_ofClient) => {
+    var is_duplicate = false;
+    uploadFile
+    .find()
+    .then(data => {
+      data.forEach(item => {
+        if (item.name == data_ofClient.name) {
+          is_duplicate = true;
+        }
+      });
+      if (!is_duplicate) {
+        uploadFile.insert(data_ofClient)
+          .then(() => {
+            // cap nhap lai du lieu
+            uploadFile
+            .find()
+            .then(data => {
+              io.sockets.emit('data', data);
+            });
+          })
+          .catch(err => console.log(err));
+      }else {
+        uploadFile.update({name : data_ofClient.name}, {$set : data_ofClient})
+          .then(() => {
+            // cap nhap lai du lieu
+            uploadFile
+            .find()
+            .then(data => {
+              io.sockets.emit('data', data);
+            });
+          });
+      }
+    });
   });
 
   uploadFile
   .find()
-  .then(creator => {
-    socket.emit('data', creator);
-  });
-
-  app.post('/upload', (req, res) => {
-    var data;
-    const file_ = req.files.file;
-    const date = new Date(Date.now());
-    if (file_.length === undefined) {
-      data = {
-        name: file_.name,
-        type: file_.mimetype,
-        date: date.toLocaleString('en-GB'),
-        url_data: `data:${file_.mimetype};base64,${file_.data.toString('base64')}`
-      }
-    }else {
-      file_.forEach(file => {
-        data = {
-          name: file.name,
-          type: file.mimetype,
-          date: date.toLocaleString('en-GB'),
-          url_data: `data:${file.mimetype};base64,${file.data.toString('base64')}`
-        }
-      });
-    }
-    uploadFile.insert(data)
-      .then(res => {
-        io.sockets.emit('ServerSendData', res);
-      })
-      .catch(err => console.log(err));
-    res.redirect('/');
+  .then(data => {
+    socket.emit('data', data);
   });
 });
