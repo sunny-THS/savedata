@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const monk = require('monk');
-const fileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload');
+const request = require('request');
 var http = require('http');
 if (process.env.NODE_ENV !== 'production')
   require('dotenv').config()
@@ -25,17 +26,37 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get('/data', (req, res) => {
-  uploadFile
+app.get('/data', async (req, res) => {
+  await uploadFile
   .find()
   .then(data => {
     res.send(data);
   });
 })
 
-app.post('/upload', (req, res) => {
+app.post('/upload', async (req, res) => {
+  console.log(req.files.file.data.toString('binary'));
   res.redirect('/');
 });
+
+app.get('/:fileName', async (req, res) => {
+  const fileName = await req.params.fileName == 'favicon.ico'? null : req.params.fileName;
+  if (fileName!=null) {
+    uploadFile
+    .findOne({name: fileName})
+    .then(data => {
+      request.get(data.url_data, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+              var data_ = body;
+              console.log(data_);
+              res.send(body);
+          }
+      });
+    })
+    .catch(err => console.log(err));
+  }
+  // res.send(fileName);
+})
 
 io.on('connection', (socket) => {
   socket.on('ClientRemoveData', (data_) => {

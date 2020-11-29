@@ -49,14 +49,13 @@ function ShowData(val) {
     el = newEl('img', {
       src: val.url_data,
       width: '300px',
-      onclick: `window.open('${val.url_data}', '_blank');`
+      onclick: `window.open('${val.url_data}', '_blank');`,
+      alt: val.name
     });
   } else {
-    el = newEl('a', {
-      href: val.url_data,
+    el = newEl('span', {
       innerText: val.name,
-      target: '_blank',
-      download: val.name,
+      onclick: `openFile(this.textContent, '${val.url_data}');`
     });
   }
   card.appendChild(el);
@@ -67,7 +66,6 @@ function ShowData(val) {
 document.querySelector('.submit_').addEventListener('click', function (e) {
   const inputFile = document.querySelector('.inputfile');
   const files = inputFile.files;
-  // console.log(files);
   uploadFile(files);
 });
 
