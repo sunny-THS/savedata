@@ -3,27 +3,28 @@ const socket = io();
 socket.on('data', (res) => {
   var ctr = document.querySelector('.container');
   while (ctr.hasChildNodes()) {
-      ctr.removeChild(ctr.firstChild);
+    ctr.removeChild(ctr.firstChild);
   }
   res.forEach(data => {
     ShowData(data);
   });
   document.querySelector('.submit_').disabled = true;
   document.querySelector('form').reset();
-  document.querySelector('span').textContent = 'Choose a file...'
+  document.querySelector('#filename').textContent = 'Choose a file...'
 });
 var name_File = [];
 var firebaseConfig = {
-    apiKey: "AIzaSyBpxjgKuC3qOEvU6lIGDFXTTBzAq7s6CqU",
-    authDomain: "chat-ab728.firebaseapp.com",
-    databaseURL: "https://chat-ab728.firebaseio.com",
-    projectId: "chat-ab728",
-    storageBucket: "chat-ab728.appspot.com",
-    messagingSenderId: "696287797329",
-    appId: "1:696287797329:web:3f64cbc909a53d8d791870"
-  };
+  apiKey: "AIzaSyCxT1kJldnxGzhC9JTYpdnTKSs-VcZjJEQ",
+  authDomain: "savedata-sd.firebaseapp.com",
+  projectId: "savedata-sd",
+  storageBucket: "savedata-sd.appspot.com",
+  messagingSenderId: "414583324682",
+  appId: "1:414583324682:web:d5cec1814d4d5c663c5ff3",
+  measurementId: "G-RD0CTDVY9R"
+};
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 document.addEventListener("DOMContentLoaded", event => {
   var app = firebase.app();
@@ -63,7 +64,7 @@ function ShowData(val) {
   ctr.scrollTop = ctr.scrollHeight;
 }
 
-document.querySelector('.submit_').addEventListener('click', function (e) {
+document.querySelector('.submit_').addEventListener('click', function(e) {
   const inputFile = document.querySelector('.inputfile');
   const files = inputFile.files;
   uploadFile(files);
@@ -73,7 +74,7 @@ function uploadFile(files) {
   var titlePage = document.querySelector('title');
   const date = new Date(Date.now());
 
-  Array.prototype.forEach.call(files, function (file) {
+  Array.prototype.forEach.call(files, function(file) {
     const nameFile = file.name;
     const Itemfile = file;
     const storageRef = firebase.storage().ref();
@@ -100,7 +101,7 @@ function uploadFile(files) {
       filesRef.snapshot.ref.getDownloadURL().then((downloadURL) => {
         const setupFile = {
           name: file.name,
-          type: file.type==""?'application/octet-stream':file.type,
+          type: file.type == "" ? 'application/octet-stream' : file.type,
           date: date.toLocaleString('en-GB'),
           url_data: downloadURL
         }
