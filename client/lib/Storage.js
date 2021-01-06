@@ -1,33 +1,34 @@
 const socket = io();
 
-socket.on('data', (res) => {
-  var ctr = document.querySelector('.container');
+socket.on('ServerSendResFind', (res) => {
+  let ctr = document.querySelector('.container');
   while (ctr.hasChildNodes()) {
     ctr.removeChild(ctr.firstChild);
   }
   res.forEach(data => {
     ShowData(data);
   });
+});
+
+socket.on('data', (res) => {
+  let ctr = document.querySelector('.container');
+  let fol = document.querySelector('#folders');
+  while (fol.hasChildNodes()) {
+    fol.removeChild(fol.firstChild);
+  }
+  while (ctr.hasChildNodes()) {
+    ctr.removeChild(ctr.firstChild);
+  }
+  res.forEach(data => {
+    ShowData(data);
+  });
+  res.distinct(obj=>obj.folder).forEach(data => {
+    if (data.folder != 'root')
+      ListFolders(data.folder);
+  });
   document.querySelector('.submit_').disabled = true;
   document.querySelector('form').reset();
   document.querySelector('#filename').textContent = 'Choose a file...'
-});
-var name_File = [];
-var firebaseConfig = {
-  apiKey: "AIzaSyCxT1kJldnxGzhC9JTYpdnTKSs-VcZjJEQ",
-  authDomain: "savedata-sd.firebaseapp.com",
-  projectId: "savedata-sd",
-  storageBucket: "savedata-sd.appspot.com",
-  messagingSenderId: "414583324682",
-  appId: "1:414583324682:web:d5cec1814d4d5c663c5ff3",
-  measurementId: "G-RD0CTDVY9R"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
-document.addEventListener("DOMContentLoaded", event => {
-  var app = firebase.app();
 });
 
 function newEl(type, attrs = {}) {
@@ -39,24 +40,27 @@ function newEl(type, attrs = {}) {
   }
   return el;
 }
-
+function ListFolders(val) {
+  const folders = document.querySelector('#folders');
+  const folder = newEl('option', { value: `${val}` });
+  folders.appendChild(folder);
+}
 function ShowData(val) {
   const ctr = document.querySelector('.container');
-  const card = newEl('div', {
-    class: 'card'
-  });
+  const card = newEl('div', { class: 'card' });
   var el;
   if (val.type == "image/png" || val.type == "image/jpeg") {
     el = newEl('img', {
       src: val.url_data,
       width: '300px',
       onclick: `window.open('${val.url_data}', '_blank');`,
-      alt: val.name
+      alt: val.name,
+      title: val.name
     });
   } else {
     el = newEl('span', {
       innerText: val.name,
-      onclick: `openFile(this.textContent, '${val.url_data}');`
+      onclick: `location.href = '${val.url_data}';`
     });
   }
   card.appendChild(el);
@@ -67,18 +71,22 @@ function ShowData(val) {
 document.querySelector('.submit_').addEventListener('click', function(e) {
   const inputFile = document.querySelector('.inputfile');
   const files = inputFile.files;
-  uploadFile(files);
+  let p = prompt('Hãy nhập mật khẩu', '');
+  if (p == 'adminsavedata')
+    uploadFile(files);
+  else alert('Mật Khẩu Không Chính Xác\nXin Mời Nhập Lại');
 });
 
 function uploadFile(files) {
   var titlePage = document.querySelector('title');
-  const date = new Date(Date.now());
+  const date = new Date(Date.now()); // get datetime now
+  const username = prompt('Xin mời nhập tên','');
 
   Array.prototype.forEach.call(files, function(file) {
     const nameFile = file.name;
     const Itemfile = file;
     const storageRef = firebase.storage().ref();
-    const filesRef = storageRef.child(nameFile).put(Itemfile);
+    const filesRef = storageRef.child(`${username}/${nameFile}`).put(Itemfile);
 
     filesRef.on('state_changed', snapshot => {
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -93,7 +101,7 @@ function uploadFile(files) {
       }
     }, error => {
       // Handle unsuccessful uploads
-      console.error(error);
+      alert(error);
     }, () => {
       // Handle successful uploads on complete
       titlePage.textContent = 'Save data';
@@ -101,8 +109,9 @@ function uploadFile(files) {
       filesRef.snapshot.ref.getDownloadURL().then((downloadURL) => {
         const setupFile = {
           name: file.name,
-          type: file.type == "" ? 'application/octet-stream' : file.type,
+          type: file.type == '' ? 'application/octet-stream' : file.type,
           date: date.toLocaleString('en-GB'),
+          folder: username == '' ? 'root' : username,
           url_data: downloadURL
         }
         socket.emit('ClientSendData', setupFile);

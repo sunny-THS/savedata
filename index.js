@@ -30,12 +30,12 @@ app.get('/data', async (req, res) => {
   await uploadFile
   .find()
   .then(data => {
-    res.send(data);
+    res.json(data);
   });
 })
 
 app.post('/upload', async (req, res) => {
-  console.log(req.files.file.data.toString('binary'));
+  // console.log(req.files.file.data.toString('binary'));
   res.redirect('/');
 });
 
@@ -59,8 +59,27 @@ app.get('/:fileName', async (req, res) => {
 })
 
 io.on('connection', (socket) => {
-  socket.on('ClientRemoveData', (data_) => {
-    io.sockets.emit('ServerRemoveData', data_);
+  // socket.on('ClientRemoveData', (data_) => {
+  //   io.sockets.emit('ServerRemoveData', data_);
+  // });
+
+  socket.on('ClientFindData', (folder) => {
+    if (folder != '') {
+      uploadFile
+      .find({folder: folder})
+      .then(data => {
+        socket.emit('ServerSendResFind', data);
+      })
+      .catch(err => console.log(err));
+    }
+    else {
+      uploadFile
+      .find()
+      .then(data => {
+        socket.emit('ServerSendResFind', data);
+      })
+      .catch(err => console.log(err));
+    }
   });
 
   socket.on('ClientSendData', (data_ofClient) => {
@@ -69,7 +88,7 @@ io.on('connection', (socket) => {
     .find()
     .then(data => {
       data.forEach(item => {
-        if (item.name == data_ofClient.name) {
+        if (item.folder == data_ofClient.folder && item.name == data_ofClient.name) {
           is_duplicate = true;
         }
       });
