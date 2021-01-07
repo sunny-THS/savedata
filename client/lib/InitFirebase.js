@@ -10,7 +10,20 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
-
 document.addEventListener("DOMContentLoaded", event => {
   var app = firebase.app();
+  if (!localStorage.username) {
+    localStorage.username = prompt('Xin mời nhập tên','');
+  }
+  if (!sessionStorage.pw) {
+    var pw;
+    do {
+      pw = prompt('Hãy nhập mật khẩu', '');
+      if (pw != 'adminsavedata') {
+        alert('Mật Khẩu Không Chính Xác');
+        if (!confirm('Bạn Muốn Tiếp Tục Đăng Nhập?')) break;
+      }
+    } while (pw != 'adminsavedata');
+    sessionStorage.pw = pw;
+  }
 });

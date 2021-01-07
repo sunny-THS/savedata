@@ -28,7 +28,7 @@ socket.on('data', (res) => {
   });
   document.querySelector('.submit_').disabled = true;
   document.querySelector('form').reset();
-  document.querySelector('#filename').textContent = 'Choose a file...'
+  document.querySelector('#filename').textContent = 'Choose a file...';
 });
 
 function newEl(type, attrs = {}) {
@@ -55,12 +55,13 @@ function ShowData(val) {
       width: '300px',
       onclick: `window.open('${val.url_data}', '_blank');`,
       alt: val.name,
-      title: val.name
+      title: `${val.name} - ${val.folder}`
     });
   } else {
     el = newEl('span', {
       innerText: val.name,
-      onclick: `location.href = '${val.url_data}';`
+      onclick: `location.href = '${val.url_data}';`,
+      title: `${val.name} - ${val.folder}`
     });
   }
   card.appendChild(el);
@@ -71,22 +72,20 @@ function ShowData(val) {
 document.querySelector('.submit_').addEventListener('click', function(e) {
   const inputFile = document.querySelector('.inputfile');
   const files = inputFile.files;
-  let p = prompt('Hãy nhập mật khẩu', '');
-  if (p == 'adminsavedata')
+  if (sessionStorage.pw == 'adminsavedata')
     uploadFile(files);
-  else alert('Mật Khẩu Không Chính Xác\nXin Mời Nhập Lại');
+  else alert('Không Thể Lưu Dữ Liệu');
 });
 
 function uploadFile(files) {
   var titlePage = document.querySelector('title');
   const date = new Date(Date.now()); // get datetime now
-  const username = prompt('Xin mời nhập tên','');
 
   Array.prototype.forEach.call(files, function(file) {
     const nameFile = file.name;
     const Itemfile = file;
     const storageRef = firebase.storage().ref();
-    const filesRef = storageRef.child(`${username}/${nameFile}`).put(Itemfile);
+    const filesRef = storageRef.child(`${localStorage.username}/${nameFile}`).put(Itemfile);
 
     filesRef.on('state_changed', snapshot => {
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -111,7 +110,7 @@ function uploadFile(files) {
           name: file.name,
           type: file.type == '' ? 'application/octet-stream' : file.type,
           date: date.toLocaleString('en-GB'),
-          folder: username == '' ? 'root' : username,
+          folder: localStorage.username == '' ? 'root' : localStorage.username,
           url_data: downloadURL
         }
         socket.emit('ClientSendData', setupFile);

@@ -2,6 +2,7 @@ document.querySelector('#findButton').addEventListener('click', function (e) {
   document.querySelector('.findData').style.display = 'block';
   document.querySelector('.BlurData').style.filter = 'blur(4px)';
   document.querySelector('.BlurData').style.pointerEvents = 'none';
+  document.querySelector('#folder').value = '';
 });
 document.querySelector('#closeFind').addEventListener('click', function (e) {
   document.querySelector('.findData').style.display = 'none';
