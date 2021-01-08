@@ -1,7 +1,7 @@
 // disable right click
 document.addEventListener('contextmenu', event => event.preventDefault());
 
-document.onkeydown = function (e) {
+document.onkeydown = e => {
     // disable F12 key
     if(e.keyCode == 123) {
         return false;
