@@ -3,24 +3,8 @@ body {
   font-size: 40px;
 }
 #title {
-  font-size: 150%;
+  font-size: 1.5em;
   user-select: none;
-}
-.card img {
-  cursor: pointer;
-}
-#findButton {
-  position: absolute;
-  cursor: pointer;
-  right: 20px;
-  top: 20px;
-}
-#closeFind {
-  position: absolute;
-  font-size: 20px;
-  right: 5px;
-  top: -5px;
-  cursor: pointer;
 }
 .submit_ {
   font-size: 1rem;
@@ -28,26 +12,6 @@ body {
   vertical-align: middle;
   margin-top: -2.25em;
   margin-right: 0.25em;
-  cursor: pointer;
-}
-.submit_:active {
-  background: #000;
-  color: #fff;
-}
-.findData {
-  top: 50%;
-  left: 50%;
-  font-size: 25px;
-  padding: 15px 20px;
-  position: absolute;
-  border: 2px solid #000;
-  background: rgb(3, 174, 255);
-  color: #fff;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  display: none;
-}
-.findData #bf {
   cursor: pointer;
 }
 .inputfile {
@@ -96,12 +60,16 @@ body {
   overflow-y: scroll;
   display: flex;
   flex-flow: row wrap;
-  margin-top: 30px;
+  justify-content: center;
+  margin-top: 25px;
 }
 .card {
   margin: 5px;
   padding: 20px;
   border: 1px solid #fff;
+}
+.card img {
+  cursor: pointer;
 }
 .card span {
   font-size: 30px;
@@ -112,6 +80,7 @@ body {
 .card span:hover {
   color: #aaf;
 }
+/* scroll of container */
 /* width */
 ::-webkit-scrollbar {
   width: 8px;
