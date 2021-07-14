@@ -6,15 +6,17 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script defer type="text/javascript" src="lib/Storage.js"></script>
+    <script defer type="text/javascript" src="lib/app.js"></script>
     <script defer type="text/javascript" src="lib/inputFile.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- <script defer type="text/javascript" src="lib/preventConsole.js"></script> -->
     <title>Save data</title>
     <link rel="shortcut icon" href="icon/ico.ico">
     <link rel="stylesheet" href="style/style.css">
   </head>
   <body oncontextmenu="return false;">
-    <div class="BlurData">
-      <h1 id="title">-- Cloud --</h1>
+    <input class="btnToggle" type="submit" value="Data">
+    <div class="uploadData">
       <input id="f" name="file" type="file" class="inputfile" data-multiple-caption="{count} files selected" multiple />
       <label for="f">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
@@ -24,6 +26,14 @@
       </label>
       <input type="submit" class="submit_" disabled='true' value="Upload File">
     </div>
+
+    <div class="loading">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
     <div class="container"></div>
   </body>
 </html>

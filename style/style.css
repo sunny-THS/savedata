@@ -1,10 +1,8 @@
 body {
   text-align: center;
   font-size: 40px;
-}
-#title {
-  font-size: 1.5em;
-  user-select: none;
+  margin: 0;
+  box-sizing: border-box;
 }
 .submit_ {
   font-size: 1rem;
@@ -32,7 +30,7 @@ body {
   cursor: pointer;
   display: inline-block;
   overflow: hidden;
-  padding: 0.625rem 1.25rem;
+  padding: .625rem 1.25rem;
 }
 .inputfile + label svg {
     width: 1em;
@@ -48,20 +46,37 @@ body {
 .inputfile + label:hover {
     color: #722040;
 }
-.BlurData {
-  pointer-events: auto;
-  filter: blur(0px);
+.uploadData {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
+
+.btnToggle {
+  font-size: .5em;
+  padding: .25rem .625rem;
+  border-radius: 25px;
+  cursor: pointer;
+  outline: none;
+  border: 2px solid #262626;
+  vertical-align: middle;
+}
+.btnToggle:hover {
+  font-weight: bold;
+  box-shadow: inset 0px 0px 7px #000;
+}
+/* ............................................................. */
 .container {
   background-color: #fff;
-  height: 400px;
+  height: 80vh;
   width: 100%;
   float: left;
   overflow-y: scroll;
-  display: flex;
   flex-flow: row wrap;
   justify-content: center;
   margin-top: 25px;
+  display: none;
 }
 .card {
   margin: 5px;
@@ -99,4 +114,94 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #ccc;
+}
+/* -------------------------------------------------- */
+.loading
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) rotate(45deg);
+    padding:40px;
+    animation: animate 1s linear infinite;
+    display: none;
+}
+.loading div
+{
+    background: #333;
+    position: absolute;
+    padding: 20px;
+    animation: rt 1s linear infinite;
+}
+.loading div:nth-child(1)
+{
+    top: 0;
+    left: 0;
+    background: #c66;
+}
+.loading div:nth-child(2)
+{
+    top: 0;
+    right: 0;
+    background: #be6;
+}
+.loading div:nth-child(3)
+{
+    bottom: 0;
+    right: 0;
+    background: #f06;
+}
+.loading div:nth-child(4)
+{
+    bottom: 0;
+    left: 0;
+    background: #0ef;
+}
+
+
+@keyframes animate
+{
+    0%
+    {
+        padding: 40px;
+    }
+    10%
+    {
+        padding: 40px;
+    }
+    50%
+    {
+        padding: 60px;
+    }
+    90%
+    {
+        padding: 40px;
+    }
+    100%
+    {
+        padding: 40px;
+    }
+}
+@keyframes rt
+{
+    0%
+    {
+        transform: rotate(0deg);
+    }
+    10%
+    {
+        transform: rotate(0deg);
+    }
+    50%
+    {
+        transition-duration: rotate(90deg);
+    }
+    90%
+    {
+        transform: rotate(90deg);
+    }
+    100%
+    {
+        transform: rotate(90deg);
+    }
 }
