@@ -2,7 +2,7 @@
 /node_modules
 
 # service key firebase
-serviceAccountKey
+serviceAccountKey.json
 
 # misc
 .env
