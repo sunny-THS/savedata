@@ -1,0 +1,102 @@
+body {
+  text-align: center;
+  font-size: 40px;
+}
+#title {
+  font-size: 1.5em;
+  user-select: none;
+}
+.submit_ {
+  font-size: 1rem;
+  padding: 0.625rem 1.25rem;
+  vertical-align: middle;
+  margin-top: -2.25em;
+  margin-right: 0.25em;
+  cursor: pointer;
+}
+.inputfile {
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.inputfile + label {
+  color: #d3394c;
+  max-width: 80%;
+  font-size: 2rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.625rem 1.25rem;
+}
+.inputfile + label svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    vertical-align: middle;
+    margin-top: -0.25em;
+    margin-right: 0.25em;
+}
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+.inputfile + label:hover {
+    color: #722040;
+}
+.BlurData {
+  pointer-events: auto;
+  filter: blur(0px);
+}
+.container {
+  background-color: #fff;
+  height: 400px;
+  width: 100%;
+  float: left;
+  overflow-y: scroll;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-top: 25px;
+}
+.card {
+  margin: 5px;
+  padding: 20px;
+  border: 1px solid #fff;
+}
+.card img {
+  cursor: pointer;
+}
+.card span {
+  font-size: 30px;
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+.card span:hover {
+  color: #aaf;
+}
+/* scroll of container */
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #888;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #262626;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
+}

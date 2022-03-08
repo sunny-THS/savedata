@@ -1,0 +1,24 @@
+POST  http://localhost:5002/storage/getFile
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWUyYTI5YTU3ZWNjN2M4ZTliMGIwNyIsIm5hbWUiOiJ0dWh1ZXNvbiIsImlhdCI6MTY0NjcyNjczNCwiZXhwIjoxNjQ2NzI5NDM0fQ.yvHlpUPe3rgxEDRZCe0rAnbUlxgRw95POCaTdEhwwyo
+
+{
+    "name": "tuhueson"
+}
+###
+POST  http://localhost:5002/auth/register
+content-type: application/json
+
+{
+    "username": "tuhueson",
+    "pw": "123456789"
+}
+
+###
+POST http://localhost:5002/auth/login
+Content-Type: application/json
+
+{
+    "username": "tuhueson",
+    "pw": "123456789"
+}
