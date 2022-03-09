@@ -22,16 +22,21 @@ export default function createElFormFile(infoFiles) {
             case 'application/pdf': {
                 iconFile = 'file-pdf';
             }break;
-            case 'application/octet-stream': {
+            case 'application/octet-stream': case 'application/vnd.rar': { // .rar file
                 iconFile = 'file-archive';
+            } break;
+            case 'text/csv': {
+                iconFile = 'file-csv';
             } break;
             case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
                 iconFile = 'file-excel';
             } break;
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
                 iconFile = 'file-word';
-            }
-            default: {};
+            } break;
+            default: {
+                iconFile = 'file';
+            };
         }
         itemFile.innerHTML = `<i class="fa fa-${iconFile} me-2"></i>${item.name}`;
 
